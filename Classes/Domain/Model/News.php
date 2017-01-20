@@ -32,7 +32,7 @@ class News {
      */
     public function setAntiRobotsNoIndex($antiRobotsNoIndex)
     {
-        $this->antiRobotsNoIndex = $antiRobotsNoIndex;
+        $this->antiRobotsNoIndex = (bool)$antiRobotsNoIndex;
     }
     
     /**
@@ -42,6 +42,6 @@ class News {
      */
     public function getAntiRobotsNoIndex()
     {
-        return $this->antiRobotsNoIndex;
+        return (bool)$this->antiRobotsNoIndex;
     }
 }

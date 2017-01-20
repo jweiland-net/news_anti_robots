@@ -2,12 +2,5 @@
 
 $GLOBALS['TYPO3_CONF_VARS']['EXT']['news']['classes']['Domain/Model/News'][] = 'news_anti_robots';
 
-/** @var \TYPO3\CMS\Extbase\SignalSlot\Dispatcher $signalSlotDispatcher */
-$signalSlotDispatcher = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('TYPO3\\CMS\\Extbase\\SignalSlot\\Dispatcher');
-$signalSlotDispatcher->connect(
-    'TYPO3\\CMS\\Extbase\\Mvc\\Dispatcher',
-    'afterRequestDispatch',
-    'JWeiland\\NewsAntiRobots\\Slots\\DispatcherSlot',
-    'afterRequestDispatchSlot',
-    TRUE
-);
+/* If currently in news->detail check for existing robots meta tags and if needed replace them with the checkbox val of the news article */
+$preRenderHook = $GLOBALS['TYPO3_CONF_VARS']['SC_OPTIONS']['t3lib/class.t3lib_pagerenderer.php']['render-postProcess']['news_anti_robots'] = 'JWeiland\\NewsAntiRobots\\Hooks\\PreRenderHook->modify';
