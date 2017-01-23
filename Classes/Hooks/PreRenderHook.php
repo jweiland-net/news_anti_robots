@@ -18,8 +18,6 @@ use GeorgRinger\News\Domain\Repository\NewsRepository;
 use JWeiland\NewsAntiRobots\Domain\Model\News;
 use TYPO3\CMS\Core\Html\HtmlParser;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
-use TYPO3\CMS\Extbase\Utility\DebuggerUtility;
-
 
 /**
  * Class PreRenderHook
@@ -34,39 +32,47 @@ class PreRenderHook
      *
      * @param array $params
      */
-    public function modify($params)
+    public function modify(&$params)
     {
-        /** @var array $newsNamespace */
-        if ($newsNamespace = $this->getTxNewsNamespace())
-        {
-            if ($this->isUsingNewsDetailView($newsNamespace))
-            {
-                $newsId = $newsNamespace['news'];
+        if (!$params['metaTags']) {
+            return;
+        }
+        
+        $txNewsNamespace = $this->getTxNewsNamespace();
+        
+        if (!$txNewsNamespace) {
+            return;
+        }
+        
+        if ($this->isUsingNewsDetailView($txNewsNamespace)) {
+            $newsId = $txNewsNamespace['news'];
+            
+            /** @var News $newsArticle */
+            $newsArticle = $this->getNewsRepository()->findByUid($newsId);
+            
+            if ($newsArticle && $newsArticle->getAntiRobotsNoIndex()) {
+                $htmlParser = $this->getHtmlParser();
                 
-                $newsRepository = $this->getNewsRepository();
+                $foundMetaRobots = false;
                 
-                /** @var News $newsArticle */
-                $newsArticle = $newsRepository->findByUid($newsId);
-                
-                if ($newsArticle->getAntiRobotsNoIndex()) {
-                    $htmlParser = $this->getHtmlParser();
+                foreach ($params['metaTags'] as &$metaTag) {
+                    /* Stop if metaTag was found. Multiple tags should not exist and even then,
+                    the most restrictive robots tag should automatically be used     by robots */
+                    if ($foundMetaRobots)
+                        return;
                     
-                    $foundMetaRobots = false;
-                    
-                    foreach ($params['metaTags'] as &$metaTag) {
-                        $attributes = $htmlParser->get_tag_attributes($metaTag);
-                        if (strtolower($attributes[0]['name']) === 'robots') {
-                            $foundMetaRobots = true;
-                            if (!stripos($content = &$attributes[0]['content'], 'noindex')) {
-                                $content = $this->overrideIndexToNoIndex($content);
-                                $metaTag = '<meta ' . $htmlParser->compileTagAttribs($attributes[0]) . '>';
-                            }
+                    $attributes = $htmlParser->get_tag_attributes($metaTag);
+                    if (strtolower($attributes[0]['name']) === 'robots') {
+                        $foundMetaRobots = true;
+                        if (!stripos($content = &$attributes[0]['content'], 'noindex')) {
+                            $content = $this->overrideIndexToNoIndex($content);
+                            $metaTag = '<meta ' . $htmlParser->compileTagAttribs($attributes[0]) . '>';
                         }
                     }
-                    
-                    if (!$foundMetaRobots) {
-                        $params['metaTags'][] = '<meta name="robots" content="NOINDEX">';
-                    }
+                }
+                
+                if (!$foundMetaRobots) {
+                    $params['metaTags'][] = '<meta name="robots" content="NOINDEX">';
                 }
             }
         }
@@ -107,7 +113,6 @@ class PreRenderHook
     
     /**
      * get news namespace
-     * will return null if not existing
      *
      * @return array|null
      */
@@ -127,7 +132,7 @@ class PreRenderHook
     }
     
     /**
-     *
+     * get html parser
      *
      * @return object|HtmlParser
      */

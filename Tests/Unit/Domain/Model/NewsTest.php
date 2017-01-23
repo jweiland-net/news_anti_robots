@@ -54,4 +54,69 @@ class NewsTest extends UnitTestCase {
             $this->subject->getAntiRobotsNoIndex()
         );
     }
+    
+    /**
+     * @test
+     */
+    public function setAntiRobotsNoIndexSetsAntiRobotsNoIndex()
+    {
+        $this->subject->setAntiRobotsNoIndex(true);
+        
+        $this->assertSame(
+            true,
+            $this->subject->getAntiRobotsNoIndex()
+        );
+    }
+    
+    /**
+     * @test
+     */
+    public function setAntiRobotsNoIndexWithIntResultsInBool()
+    {
+        $this->subject->setAntiRobotsNoIndex(1);
+        
+        $this->assertSame(
+            true,
+            $this->subject->getAntiRobotsNoIndex()
+        );
+    }
+    
+    /**
+     * @test
+     */
+    public function setAntiRobotsNoIndexWithEmptyStringResultsInBool()
+    {
+        $this->subject->setAntiRobotsNoIndex('');
+    
+        $this->assertSame(
+            false,
+            $this->subject->getAntiRobotsNoIndex()
+        );
+    }
+    
+    /**
+     * @test
+     */
+    public function setAntiRobotsNoIndexWithStringResultsInBool()
+    {
+        $this->subject->setAntiRobotsNoIndex('test');
+        
+        $this->assertSame(
+            true,
+            $this->subject->getAntiRobotsNoIndex()
+        );
+    }
+    
+    /**
+     * @test
+     */
+    public function setAntiRobotsNoIndexWithNullResultsInBool()
+    {
+        $this->subject->setAntiRobotsNoIndex(null);
+    
+        $this->assertSame(
+            false,
+            $this->subject->getAntiRobotsNoIndex()
+        );
+    }
 }
