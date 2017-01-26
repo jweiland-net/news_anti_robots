@@ -27,6 +27,13 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
 class PreRenderHook
 {
     /**
+     * htmlParser
+     *
+     * @var HtmlParser
+     */
+    protected $htmlParser = null;
+    
+    /**
      * If current context is NewsDetailAction then check
      * antiRobotsNoIndex field and replace robots NOINDEX,FOLLOW depending on it
      *
@@ -34,48 +41,106 @@ class PreRenderHook
      */
     public function modify(&$params)
     {
-        if (!$params['metaTags']) {
-            return;
-        }
-        
         $txNewsNamespace = $this->getTxNewsNamespace();
         
-        if (!$txNewsNamespace) {
-            return;
-        }
-        
-        if ($this->isUsingNewsDetailView($txNewsNamespace)) {
+        if ($txNewsNamespace && $this->isUsingNewsDetailView($txNewsNamespace)) {
             $newsId = $txNewsNamespace['news'];
             
             /** @var News $newsArticle */
             $newsArticle = $this->getNewsRepository()->findByUid($newsId);
             
             if ($newsArticle && $newsArticle->getAntiRobotsNoIndex()) {
-                $htmlParser = $this->getHtmlParser();
-                
-                $foundMetaRobots = false;
-                
-                foreach ($params['metaTags'] as &$metaTag) {
-                    /* Stop if metaTag was found. Multiple tags should not exist and even then,
-                    the most restrictive robots tag should automatically be used     by robots */
-                    if ($foundMetaRobots)
-                        return;
-                    
-                    $attributes = $htmlParser->get_tag_attributes($metaTag);
-                    if (strtolower($attributes[0]['name']) === 'robots') {
-                        $foundMetaRobots = true;
-                        if (!stripos($content = &$attributes[0]['content'], 'noindex')) {
-                            $content = $this->overrideIndexToNoIndex($content);
-                            $metaTag = '<meta ' . $htmlParser->compileTagAttribs($attributes[0]) . '>';
-                        }
-                    }
-                }
-                
-                if (!$foundMetaRobots) {
+                if (
+                    !$this->replaceMetaTagInHeaderData(
+                        $params['headerData'],
+                        'name="robots"',
+                        'media',
+                        array($this, 'addNoIndexToMetaTag')
+                    ) &&
+                    !$this->replaceMetaTagInArray(
+                        $params['metaTags'],
+                        'name="robots"',
+                        array($this,'addNoIndexToMetaTag')
+                    )
+                ) {
                     $params['metaTags'][] = '<meta name="robots" content="NOINDEX">';
                 }
             }
         }
+    }
+    
+    /**
+     * Returns modified metaTag
+     *
+     * @param string $metaRobotsTag
+     *
+     * @return string
+     */
+    protected function addNoIndexToMetaTag($metaRobotsTag)
+    {
+        $metaTag = '';
+        
+        $attributes = $this->getHtmlParser()->get_tag_attributes($metaRobotsTag);
+        
+        if (!stripos($content = &$attributes[0]['content'], 'noindex')) {
+            $content = $this->overrideIndexToNoIndex($content);
+            $metaTag = '<meta ' . $this->getHtmlParser()->compileTagAttribs($attributes[0]) . '>';
+        }
+        
+        return $metaTag;
+    }
+    
+    /**
+     * Will return headerData with replaced tag or old if none found
+     *
+     * @param array $headerData
+     * @param string $searchCriteria
+     * @param string $tagName
+     * @param string $metaModifyMethod
+     *
+     * @return bool
+     */
+    protected function replaceMetaTagInHeaderData(&$headerData, $searchCriteria, $tagName, $metaModifyMethod)
+    {
+        $metaRobots = '';
+        
+        for ($i = 0, $headerDataLength = count($headerData); !$metaRobots && $i < $headerDataLength; $i++) {
+            if (stripos($headerData[$i], $searchCriteria)) {
+                $tags = $this->getHtmlParser()->getAllParts($this->getHtmlParser()->splitTags($tagName, $headerData[$i]));
+                
+                for ($j = 0, $tagsLength = count($tags); !$metaRobots && $j < $tagsLength; $j++) {
+                    if (stripos($tags[$j], $searchCriteria)) {
+                        $metaRobots = $tags[$j];
+                        $headerData[$i] = str_ireplace($metaRobots, call_user_func_array($metaModifyMethod, array($metaRobots)), $headerData[$i]);
+                    }
+                }
+            }
+        }
+        
+        return (bool)$metaRobots;
+    }
+    
+    /**
+     * Returns array with replaced tag or old of nothing found
+     *
+     * @param array $array
+     * @param string $searchCriteria
+     * @param string $metaModifyMethod
+     *
+     * @return bool
+     */
+    protected function replaceMetaTagInArray(&$array, $searchCriteria, $metaModifyMethod)
+    {
+        $metaRobots = '';
+        
+        for ($i = 0, $tagsLength = count($array); !$metaRobots && $i < $tagsLength; $i++) {
+            if (stripos($array[$i], $searchCriteria)) {
+                $metaRobots = $array[$i];
+                $array[$i] = str_ireplace($metaRobots, call_user_func_array($metaModifyMethod, array($metaRobots)), $array[$i]);
+            }
+        }
+    
+        return (bool)$metaRobots;
     }
     
     /**
@@ -138,6 +203,9 @@ class PreRenderHook
      */
     protected function getHtmlParser()
     {
-        return GeneralUtility::makeInstance('TYPO3\\CMS\\Core\\Html\\HtmlParser');
+        if (!$this->htmlParser) {
+            $this->htmlParser = GeneralUtility::makeInstance('TYPO3\\CMS\\Core\\Html\\HtmlParser');
+        }
+        return $this->htmlParser;
     }
 }
