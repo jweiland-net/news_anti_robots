@@ -53,7 +53,7 @@ class PreRenderHook
                     !$this->replaceMetaTagInHeaderData(
                         $params['headerData'],
                         'name="robots"',
-                        'media',
+                        'meta',
                         array($this, 'addNoIndexToMetaTag')
                     ) &&
                     !$this->replaceMetaTagInArray(
@@ -106,7 +106,6 @@ class PreRenderHook
         for ($i = 0, $headerDataLength = count($headerData); !$metaRobots && $i < $headerDataLength; $i++) {
             if (stripos($headerData[$i], $searchCriteria)) {
                 $tags = $this->getHtmlParser()->getAllParts($this->getHtmlParser()->splitTags($tagName, $headerData[$i]));
-                
                 for ($j = 0, $tagsLength = count($tags); !$metaRobots && $j < $tagsLength; $j++) {
                     if (stripos($tags[$j], $searchCriteria)) {
                         $metaRobots = $tags[$j];
@@ -115,7 +114,6 @@ class PreRenderHook
                 }
             }
         }
-        
         return (bool)$metaRobots;
     }
     
