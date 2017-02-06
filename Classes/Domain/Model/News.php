@@ -23,16 +23,18 @@ class News {
     /**
      * @var bool
      */
-    protected $antiRobotsNoIndex;
+    protected $hasMetaRobotsNoIndexDefined = false;
     
     /**
      * Set $antiRobotsNoIndex
      *
-     * @param bool $antiRobotsNoIndex
+     * @param bool $hasMetaRobotsNoIndexDefined
+     *
+     * @return void
      */
-    public function setAntiRobotsNoIndex($antiRobotsNoIndex)
+    public function setHasMetaRobotsNoIndexDefined($hasMetaRobotsNoIndexDefined)
     {
-        $this->antiRobotsNoIndex = (bool)$antiRobotsNoIndex;
+        $this->hasMetaRobotsNoIndexDefined = (bool)$hasMetaRobotsNoIndexDefined;
     }
     
     /**
@@ -40,8 +42,8 @@ class News {
      *
      * @return bool
      */
-    public function getAntiRobotsNoIndex()
+    public function getHasMetaRobotsNoIndexDefined()
     {
-        return (bool)$this->antiRobotsNoIndex;
+        return $this->hasMetaRobotsNoIndexDefined;
     }
 }

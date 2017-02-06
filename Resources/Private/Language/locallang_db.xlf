@@ -7,7 +7,7 @@
 				<source>Anti-Robots</source>
 			</trans-unit>
 			<trans-unit id="tx_news_anti_robots.preventIndexing" xml:space="preserve">
-				<source>Prevent indexing from search engines</source>
+				<source>Prevent indexing from search engines?</source>
 			</trans-unit>
 		</body>
 	</file>

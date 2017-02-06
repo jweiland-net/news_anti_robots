@@ -47,76 +47,76 @@ class NewsTest extends UnitTestCase {
     /**
      * @test
      */
-    public function getAntiRobotsNoIndexInitiallyReturnsFalse()
+    public function getHasMetaRobotsNoIndexDefinedInitiallyReturnsFalse()
     {
         $this->assertSame(
             false,
-            $this->subject->getAntiRobotsNoIndex()
+            $this->subject->getHasMetaRobotsNoIndexDefined()
         );
     }
     
     /**
      * @test
      */
-    public function setAntiRobotsNoIndexSetsAntiRobotsNoIndex()
+    public function setHasMetaRobotsNoIndexDefinedSetsHasMetaRobotsNoIndex()
     {
-        $this->subject->setAntiRobotsNoIndex(true);
+        $this->subject->setHasMetaRobotsNoIndexDefined(true);
         
         $this->assertSame(
             true,
-            $this->subject->getAntiRobotsNoIndex()
+            $this->subject->getHasMetaRobotsNoIndexDefined()
         );
     }
     
     /**
      * @test
      */
-    public function setAntiRobotsNoIndexWithIntResultsInBool()
+    public function setHasMetaRobotsNoIndexDefinedWithIntResultsInBool()
     {
-        $this->subject->setAntiRobotsNoIndex(1);
+        $this->subject->setHasMetaRobotsNoIndexDefined(1);
         
         $this->assertSame(
             true,
-            $this->subject->getAntiRobotsNoIndex()
+            $this->subject->getHasMetaRobotsNoIndexDefined()
         );
     }
     
     /**
      * @test
      */
-    public function setAntiRobotsNoIndexWithEmptyStringResultsInBool()
+    public function setHasMetaRobotsNoIndexDefinedWithEmptyStringResultsInBool()
     {
-        $this->subject->setAntiRobotsNoIndex('');
+        $this->subject->setHasMetaRobotsNoIndexDefined('');
     
         $this->assertSame(
             false,
-            $this->subject->getAntiRobotsNoIndex()
+            $this->subject->getHasMetaRobotsNoIndexDefined()
         );
     }
     
     /**
      * @test
      */
-    public function setAntiRobotsNoIndexWithStringResultsInBool()
+    public function setHasMetaRobotsNoIndexDefinedWithStringResultsInBool()
     {
-        $this->subject->setAntiRobotsNoIndex('test');
+        $this->subject->setHasMetaRobotsNoIndexDefined('test');
         
         $this->assertSame(
             true,
-            $this->subject->getAntiRobotsNoIndex()
+            $this->subject->getHasMetaRobotsNoIndexDefined()
         );
     }
     
     /**
      * @test
      */
-    public function setAntiRobotsNoIndexWithNullResultsInBool()
+    public function setHasMetaRobotsNoIndexDefinedWithNullResultsInBool()
     {
-        $this->subject->setAntiRobotsNoIndex(null);
+        $this->subject->setHasMetaRobotsNoIndexDefined(null);
     
         $this->assertSame(
             false,
-            $this->subject->getAntiRobotsNoIndex()
+            $this->subject->getHasMetaRobotsNoIndexDefined()
         );
     }
 }
