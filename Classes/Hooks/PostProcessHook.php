@@ -43,7 +43,7 @@ class PostProcessHook
     {
         $txNewsNamespace = $this->getTxNewsNamespace();
         
-        if ($txNewsNamespace && $newsId = $this->getNewsId($txNewsNamespace['news'])) {
+        if ($txNewsNamespace && $newsId = $this->getNewsId($txNewsNamespace)) {
             /** @var News $newsArticle */
             $newsArticle = $this->getNewsRepository()->findByUid($newsId);
             if ($newsArticle && $newsArticle->getHasMetaRobotsNoIndexDefined()) {
