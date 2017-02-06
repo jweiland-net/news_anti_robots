@@ -24,7 +24,7 @@ use TYPO3\CMS\Core\Utility\GeneralUtility;
  *
  * @package JWeiland\NewsAntiRobots\Hooks
  */
-class PreRenderHook
+class PostProcessHook
 {
     /**
      * htmlParser
