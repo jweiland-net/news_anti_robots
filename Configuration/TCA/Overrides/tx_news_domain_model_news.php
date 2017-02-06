@@ -3,8 +3,8 @@ if (!defined('TYPO3_MODE')) {
     die ('Access denied.');
 }
 
-$antiRobotsNoIndex = array(
-    'anti_robots_no_index' => array(
+$hasMetaRobotsNoIndexDefined = array(
+    'has_meta_robots_no_index_defined' => array(
         'exclude' => 1,
         'label' => 'LLL:EXT:news_anti_robots/Resources/Private/Language/locallang_db.xlf:tx_news_anti_robots.title',
         'config' => array(
@@ -20,10 +20,10 @@ $antiRobotsNoIndex = array(
 
 \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addTCAcolumns(
     'tx_news_domain_model_news',
-    $antiRobotsNoIndex
+    $hasMetaRobotsNoIndexDefined
 );
 
 \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addToAllTCAtypes(
     'tx_news_domain_model_news',
-    'anti_robots_no_index'
+    'has_meta_robots_no_index_defined'
 );

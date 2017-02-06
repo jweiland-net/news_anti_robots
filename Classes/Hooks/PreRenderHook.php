@@ -48,7 +48,6 @@ class PreRenderHook
             
             /** @var News $newsArticle */
             $newsArticle = $this->getNewsRepository()->findByUid($newsId);
-            
             if ($newsArticle && $newsArticle->getHasMetaRobotsNoIndexDefined()) {
                 if (
                     !$this->replaceMetaTagInHeaderData(
