@@ -43,9 +43,7 @@ class PostProcessHook
     {
         $txNewsNamespace = $this->getTxNewsNamespace();
         
-        if ($txNewsNamespace && $this->isUsingNewsDetailView($txNewsNamespace)) {
-            $newsId = $txNewsNamespace['news'];
-            
+        if ($txNewsNamespace && $newsId = $this->getNewsId($txNewsNamespace['news'])) {
             /** @var News $newsArticle */
             $newsArticle = $this->getNewsRepository()->findByUid($newsId);
             if ($newsArticle && $newsArticle->getHasMetaRobotsNoIndexDefined()) {
@@ -158,19 +156,21 @@ class PostProcessHook
     }
     
     /**
-     * Check if current context is using news detail view
+     * Return news id
      *
      * @param array $newsNamespace
      *
-     * @return bool
+     * @return string
      */
-    protected function isUsingNewsDetailView($newsNamespace)
+    protected function getNewsId($newsNamespace)
     {
-        if ($newsNamespace['controller'] === 'News' && $newsNamespace['action'] === 'detail') {
-            return true;
-        } else {
-            return false;
+        $newsId = '';
+        
+        if ($newsNamespace['news']) {
+            $newsId = $newsNamespace['news'];
         }
+        
+        return $newsId;
     }
     
     /**
@@ -180,7 +180,7 @@ class PostProcessHook
      */
     protected function getTxNewsNamespace()
     {
-        return GeneralUtility::_GET('tx_news_pi1');
+        return GeneralUtility::_GPmerged('tx_news_pi1');
     }
     
     /**
