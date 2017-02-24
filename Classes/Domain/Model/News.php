@@ -19,7 +19,8 @@ namespace JWeiland\NewsAntiRobots\Domain\Model;
  *
  * @package JWeiland\NewsAntiRobots\Domain\Model
  */
-class News {
+class News
+{
     /**
      * @var bool
      */

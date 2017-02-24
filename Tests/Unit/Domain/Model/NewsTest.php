@@ -22,7 +22,8 @@ use TYPO3\CMS\Core\Tests\UnitTestCase;
  *
  * @package JWeiland\NewsAntiRobots\Domain\Model
  */
-class NewsTest extends UnitTestCase {
+class NewsTest extends UnitTestCase
+{
     /**
      * @var News
      */
