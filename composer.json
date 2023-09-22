@@ -4,7 +4,7 @@
   "description": "Adds a No Index field to NewsArticle to prevent robots from indexing a specific news article",
   "license": "GPL-2.0-or-later",
   "keywords": ["typo3", "TYPO3 CMS", "news-anti-robots", "News Anti Robots"],
-  "homepage": "http://www.jweiland.net",
+  "homepage": "https://jweiland.net",
   "authors": [
     {
       "name": "Markus Kugler",
@@ -26,6 +26,9 @@
     "phpunit/phpunit": "~4.7.7",
     "georgringer/news": "3.0.*"
   },
+	"replace": {
+		"typo3-ter/news_anti_robots": "self.version"
+	},
   "autoload": {
     "psr-4": {
       "JWeiland\\NewsAntiRobots\\": "Classes"
