@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<xliff version="1.0">
+  <file source-language="en" datatype="plaintext" original="messages" date="2014-06-02T11:48:25Z" product-name="news" target-language="da">
+    <header/>
+    <body>
+      <trans-unit id="tx_news_anti_robots.title" xml:space="preserve">
+				<source>Anti-Robots</source>
+			<target state="needs-translation">Anti-Robots</target></trans-unit>
+      <trans-unit id="tx_news_anti_robots.preventIndexing" xml:space="preserve">
+				<source>Prevent indexing from search engines?</source>
+			<target state="needs-translation">Prevent indexing from search engines?</target></trans-unit>
+    </body>
+  </file>
+</xliff>
