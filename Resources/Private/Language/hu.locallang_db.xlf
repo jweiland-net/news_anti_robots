@@ -5,10 +5,10 @@
     <body>
       <trans-unit id="tx_news_anti_robots.title" xml:space="preserve">
 				<source>Anti-Robots</source>
-			<target state="needs-translation">Anti-Robots</target></trans-unit>
+			<target state="translated">Robotvédelem</target></trans-unit>
       <trans-unit id="tx_news_anti_robots.preventIndexing" xml:space="preserve">
 				<source>Prevent indexing from search engines?</source>
-			<target state="needs-translation">Prevent indexing from search engines?</target></trans-unit>
+			<target state="translated">Megakadályozza a keresőmotorok indexelését?</target></trans-unit>
     </body>
   </file>
 </xliff>
